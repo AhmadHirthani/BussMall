@@ -98,23 +98,70 @@ function randomNumber( min, max ) {
 
 renderNewBusMall();
 
-button.addEventListener( 'click', getResult );
+button.addEventListener( 'click', renderChart );
 
-function getResult() {
+// function getResult() {
 
-  const parentElement = document.getElementById ( 'result' );
-  const articleElement = document.createElement ( 'article' );
-  parentElement.appendChild ( articleElement );
+//   const parentElement = document.getElementById ( 'result' );
+//   const articleElement = document.createElement ( 'article' );
+//   parentElement.appendChild ( articleElement );
 
-  for ( let i = 0 ; i < BusMall.all.length ; i++ ){
-    const pElement = document.createElement ( 'p' );
-    articleElement.appendChild( pElement );
-    pElement.textContent = `${BusMall.all[i].name} had ${BusMall.all[i].clicks} votes, and was seen ${BusMall.all[i].shown} times`;
+//   for ( let i = 0 ; i < BusMall.all.length ; i++ ){
+//     const pElement = document.createElement ( 'p' );
+//     articleElement.appendChild( pElement );
+//     pElement.textContent = `${BusMall.all[i].name} had ${BusMall.all[i].clicks} votes, and was seen ${BusMall.all[i].shown} times`;
+//   }
+
+//   button.removeEventListener( 'click', getResult );
+//   button.textContent = 'Reset';
+//   button.onclick = function( event ) {
+//     location.reload();
+//   };
+// }
+
+function renderChart() {
+
+  let nameArray = [];
+  let clicksArray = [];
+  let showsArray = [];
+
+  for( let i = 0; i < BusMall.all.length; i++ ) {
+    nameArray.push( BusMall.all[i].name );
+    clicksArray.push( BusMall.all[i].clicks );
+    showsArray.push( BusMall.all[i].shown );
+
   }
 
-  button.removeEventListener( 'click', getResult );
-  button.textContent = 'Reset';
-  button.onclick = function( event ) {
-    location.reload();
-  };
+  let ctx = document.getElementById( 'myChart' ).getContext( '2d' );
+  new Chart( ctx, {
+    type: 'bar',
+    data: {
+      labels: nameArray,
+      datasets: [
+        {
+          label: '# of Votes',
+          data: clicksArray,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 3
+        },
+        {
+          label: '# of shows',
+          data: showsArray,
+          backgroundColor: 'rgba(255, 99, 132, 0.2)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 3
+        }
+      ]
+    },
+    options: {
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
+    }
+  } );
 }
