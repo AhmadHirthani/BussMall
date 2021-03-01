@@ -6,15 +6,17 @@ const imageSection = document.getElementById( 'imageSection' );
 const leftImage = document.getElementById( 'leftImage' );
 const rightImage = document.getElementById( 'rightImage' );
 const centerImage = document.getElementById( 'centerImage' );
+const button = document.getElementById( 'res' );
 
 let leftImageIndex = 0;
 let rightImageIndex = 0;
 let centerImageIndex = 0;
 const clickCounter = 25;
 
-function BusMall( name ) {
+
+function BusMall( name ,img ) {
   this.name = name;
-  this.image = `./assets/img/${name}`;
+  this.image = `./assets/img/${img}`;
   this.clicks = 0;
   this.shown = 0;
   BusMall.all.push( this );
@@ -24,7 +26,10 @@ BusMall.all = [];
 BusMall.counter = 0;
 
 for( let i = 0; i < imgArray.length; i++ ) {
-  new BusMall( imgArray[i] );
+  new BusMall( getName( imgArray[i] ),imgArray[i] );
+}
+function getName( fileName ){
+  return fileName.split( '.' ).slice( 0, -1 ).join( '.' );
 }
 
 function renderNewBusMall() {
@@ -91,23 +96,25 @@ function randomNumber( min, max ) {
   return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
 }
 
-
-// const result = document.getElementById( 'result' );
-// result.addEventListener( 'submit', function ( event ) {
-//   event.preventDefault();
-
-//   const Name = event.target.Name.value;
-//   const leftImage = event.target.leftImage.value;
-//   const rightImage = event.target.rightImage.value;
-//   const centerImage = event.target.centerImage.value;
-//   const bus = new BusMall( Name, leftImage, rightImage, centerImage );
-
-//   result.reset();
-//   bus.randomCustomer();
-//   bus.renderNewBusMall();
-
-//   console.log( BusMall.all );
-
-// } );
-
 renderNewBusMall();
+
+button.addEventListener( 'click', getResult );
+
+function getResult() {
+
+  const parentElement = document.getElementById ( 'result' );
+  const articleElement = document.createElement ( 'article' );
+  parentElement.appendChild ( articleElement );
+
+  for ( let i = 0 ; i < BusMall.all.length ; i++ ){
+    const pElement = document.createElement ( 'p' );
+    articleElement.appendChild( pElement );
+    pElement.textContent = `${BusMall.all[i].name} had ${BusMall.all[i].clicks} votes, and was seen ${BusMall.all[i].shown} times`;
+  }
+
+  button.removeEventListener( 'click', getResult );
+  button.textContent = 'Reset';
+  button.onclick = function( event ) {
+    location.reload();
+  };
+}
