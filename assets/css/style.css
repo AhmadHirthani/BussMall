@@ -1,0 +1,50 @@
+#leftImage{
+    width: 250px;
+    height: 300px;
+    padding: 20px;   
+}
+#rightImage{
+    width: 250px;
+    height: 300px;
+    padding: 20px;   
+}
+#centerImage{
+    width: 250px;
+    height: 300px;
+    padding: 20px;    
+}
+header{
+    text-align: center;
+    
+    background-color: rgb(151, 161, 170);
+    height: 40px;
+    padding: 20px;
+    margin-bottom: 30px;
+    line-height: 3.5em;
+}
+
+.image-section{
+    margin: 30px;
+}
+body{
+    width: 960px;
+  margin: auto;
+  background: #9e8a8d;
+  height: 100vh;
+  padding: 20px;
+}
+#ol{
+    color: rgb(215, 221, 233);
+    line-height:.7cm;
+    columns: 2;
+
+}
+footer{
+    position:relative;
+    width:100%;
+    bottom:0px;
+    text-align: center;
+    margin-top: 40px;
+    background-color: rgb(151, 161, 170);
+    color: deeppink;
+}

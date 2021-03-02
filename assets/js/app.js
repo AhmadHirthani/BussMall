@@ -2,7 +2,6 @@
 
 let imgArray = ['bag.jpg','banana.jpg','bathroom.jpg','boots.jpg' ,'breakfast.jpg','bubblegum.jpg','chair.jpg','cthulhu.jpg','dog-duck.jpg','dragon.jpg','pen.jpg','pet-sweep.jpg','scissors.jpg','shark.jpg','sweep.png','tauntaun.jpg','unicorn.jpg','usb.gif','water-can.jpg','wine-glass.jpg'];
 
-const imageSection = document.getElementById( 'imageSection' );
 const leftImage = document.getElementById( 'leftImage' );
 const rightImage = document.getElementById( 'rightImage' );
 const centerImage = document.getElementById( 'centerImage' );
@@ -25,18 +24,24 @@ function BusMall( name ,img ) {
 BusMall.all = [];
 BusMall.counter = 0;
 
-for( let i = 0; i < imgArray.length; i++ ) {
-  new BusMall( getName( imgArray[i] ),imgArray[i] );
-}
+
 function getName( fileName ){
   return fileName.split( '.' ).slice( 0, -1 ).join( '.' );
 }
+
+for( let i = 0; i < imgArray.length; i++ ) {
+  new BusMall( getName( imgArray[i] ),imgArray[i] );
+}
+
 let indexs = [];
+
+
 function renderNewBusMall() {
   let index = randomNumber( 0, BusMall.all.length - 1 );
   leftImage.src = BusMall.all[index].image;
   leftImage.alt = BusMall.all[index].name;
   leftImageIndex = index;
+  indexs.push( index );
 
   let rightIndex;
   let centerIndex;
@@ -45,6 +50,8 @@ function renderNewBusMall() {
     centerIndex = randomNumber( 0,BusMall.all.length - 1 );
 
   } while ( index === rightIndex || index === centerIndex || centerIndex === rightIndex );
+  indexs.push( rightIndex );
+  indexs.push( centerIndex );
   rightImage.src = BusMall.all[rightIndex].image;
   rightImage.alt = BusMall.all[rightIndex].name;
   rightImageIndex = rightIndex;
@@ -61,6 +68,8 @@ function renderNewBusMall() {
 
   // rightImage.src = BusMall.all[0].image;
 }
+
+
 
 function handelClick( event ) {
 
@@ -82,13 +91,21 @@ function handelClick( event ) {
       BusMall.counter++;
       renderNewBusMall();
 
-      console.log( BusMall.all );
     }
-  }removeEventListener( 'click',handelClick );
+
+  }
+
+  removeEventListener( 'click',handelClick );
+
+  localStorage.setItem( 'Items', JSON.stringify( BusMall.all ) );
+
   button.addEventListener( 'click',handelButton );
+
 }
+
+
 function handelButton( ){
-  const parentElement = document.getElementById( 'ol' );
+  const parentElement = document.getElementById( 'ul' );
 
   for( let i = 0;i < BusMall.all.length;i++ ){
     const li = document.createElement( 'li' );
@@ -98,6 +115,7 @@ function handelButton( ){
 
   renderChart();
 
+
   button.removeEventListener( 'click',handelButton );
   button.innerText = 'reset';
   button.onclick = function(){
@@ -106,9 +124,11 @@ function handelButton( ){
 }
 
 
-imageSection.addEventListener( 'click', handelClick );
 
-// console.log( BusMall.all );
+rightImage.addEventListener( 'click',handelClick );
+leftImage.addEventListener( 'click',handelClick );
+centerImage.addEventListener( 'click',handelClick );
+
 
 // Helper function
 function randomNumber( min, max ) {
@@ -119,6 +139,7 @@ function randomNumber( min, max ) {
     }
   }return ( index2 );
 }
+
 
 renderNewBusMall();
 
@@ -171,3 +192,12 @@ function renderChart() {
     }
   } );
 }
+function getData() {
+  const data = localStorage.getItem( 'ul' );
+  if( data ) {
+    const objData = JSON.parse( data );
+    BusMall.all = objData;
+    renderNewBusMall();
+  }
+}
+getData();
