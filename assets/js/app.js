@@ -31,12 +31,12 @@ for( let i = 0; i < imgArray.length; i++ ) {
 function getName( fileName ){
   return fileName.split( '.' ).slice( 0, -1 ).join( '.' );
 }
-
+let indexs = [];
 function renderNewBusMall() {
-  let leftIndex = randomNumber( 0, BusMall.all.length - 1 );
-  leftImage.src = BusMall.all[leftIndex].image;
-  leftImage.alt = BusMall.all[leftIndex].name;
-  leftImageIndex = leftIndex;
+  let index = randomNumber( 0, BusMall.all.length - 1 );
+  leftImage.src = BusMall.all[index].image;
+  leftImage.alt = BusMall.all[index].name;
+  leftImageIndex = index;
 
   let rightIndex;
   let centerIndex;
@@ -44,7 +44,7 @@ function renderNewBusMall() {
     rightIndex = randomNumber( 0,BusMall.all.length - 1 );
     centerIndex = randomNumber( 0,BusMall.all.length - 1 );
 
-  } while ( leftIndex === rightIndex || leftIndex === centerIndex || centerIndex === rightIndex );
+  } while ( index === rightIndex || index === centerIndex || centerIndex === rightIndex );
   rightImage.src = BusMall.all[rightIndex].image;
   rightImage.alt = BusMall.all[rightIndex].name;
   rightImageIndex = rightIndex;
@@ -54,7 +54,7 @@ function renderNewBusMall() {
   centerImage.alt = BusMall.all[centerIndex].name;
   centerImageIndex = centerIndex;
 
-  BusMall.all[leftIndex].shown++;
+  BusMall.all[index].shown++;
   BusMall.all[rightIndex].shown++;
   BusMall.all[centerIndex].shown++;
 
@@ -84,40 +84,46 @@ function handelClick( event ) {
 
       console.log( BusMall.all );
     }
-  }
+  }removeEventListener( 'click',handelClick );
+  button.addEventListener( 'click',handelButton );
 }
+function handelButton( ){
+  const parentElement = document.getElementById( 'ol' );
+
+  for( let i = 0;i < BusMall.all.length;i++ ){
+    const li = document.createElement( 'li' );
+    parentElement.appendChild( li );
+    li.textContent = `${BusMall.all[i].name} is clicked ${BusMall.all[i].clicks} and shown ${BusMall.all[i].shown}`;
+  }
+
+  renderChart();
+
+  button.removeEventListener( 'click',handelButton );
+  button.innerText = 'reset';
+  button.onclick = function(){
+    location.reload();
+  };
+}
+
 
 imageSection.addEventListener( 'click', handelClick );
 
-console.log( BusMall.all );
+// console.log( BusMall.all );
 
 // Helper function
 function randomNumber( min, max ) {
-  return Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+  let index2 = Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+  for( let i = 0; i < indexs.length;i++ ){
+    if( index2 === indexs[i] ){
+      index2 = Math.floor( Math.random() * ( max - min + 1 ) ) + min;
+    }
+  }return ( index2 );
 }
 
 renderNewBusMall();
 
 button.addEventListener( 'click', renderChart );
 
-// function getResult() {
-
-//   const parentElement = document.getElementById ( 'result' );
-//   const articleElement = document.createElement ( 'article' );
-//   parentElement.appendChild ( articleElement );
-
-//   for ( let i = 0 ; i < BusMall.all.length ; i++ ){
-//     const pElement = document.createElement ( 'p' );
-//     articleElement.appendChild( pElement );
-//     pElement.textContent = `${BusMall.all[i].name} had ${BusMall.all[i].clicks} votes, and was seen ${BusMall.all[i].shown} times`;
-//   }
-
-//   button.removeEventListener( 'click', getResult );
-//   button.textContent = 'Reset';
-//   button.onclick = function( event ) {
-//     location.reload();
-//   };
-// }
 
 function renderChart() {
 
